@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.zip.Inflater;
 
+import lamtv.project.com.myapplication.Object.Translate;
 import lamtv.project.com.myapplication.R;
 
 /**
@@ -19,9 +20,9 @@ import lamtv.project.com.myapplication.R;
 public class TranslateAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private Context context;
-    private ArrayList<String> arr;
+    private ArrayList<Translate> arr;
 
-    public TranslateAdapter(Context context, ArrayList<String> arrString) {
+    public TranslateAdapter(Context context, ArrayList<Translate> arrString) {
         this.arr = arrString;
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService
@@ -50,15 +51,17 @@ public class TranslateAdapter extends BaseAdapter {
             holder = new Holder();
             view = inflater.inflate(R.layout.item_translate,null,false);
             holder.tvText = (TextView) view.findViewById(R.id.tvTranslate);
+            holder.tvTranslate = (TextView) view.findViewById(R.id.tvTranslateVi);
             view.setTag(holder);
         }else {
             holder = (Holder) view.getTag();
         }
-        holder.tvText.setText(arr.get(i));
+        holder.tvText.setText(arr.get(i).getEn());
+        holder.tvTranslate.setText(arr.get(i).getVi());
         return view;
     }
 
     private class Holder {
-        TextView tvText;
+        TextView tvText,tvTranslate;
     }
 }
