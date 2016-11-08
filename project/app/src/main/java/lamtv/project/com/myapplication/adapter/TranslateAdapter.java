@@ -1,6 +1,8 @@
 package lamtv.project.com.myapplication.adapter;
 
 import android.content.Context;
+import android.speech.tts.TextToSpeech;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,51 +19,71 @@ import lamtv.project.com.myapplication.R;
  * Created by Le Xuan on 06-Nov-16.
  */
 
-public class TranslateAdapter extends BaseAdapter {
-    private LayoutInflater inflater;
-    private Context context;
-    private ArrayList<Translate> arr;
-
-    public TranslateAdapter(Context context, ArrayList<Translate> arrString) {
-        this.arr = arrString;
-        this.context = context;
-        inflater = (LayoutInflater) context.getSystemService
-                (Context.LAYOUT_INFLATER_SERVICE);
+public class TranslateAdapter extends RecyclerView.Adapter<TranslateAdapter.ViewHolder> {
+    private ArrayList<Translate> itemsData;
+    private TextToSpeech textToSpeech;
+    public TranslateAdapter(ArrayList<Translate> itemsData,TextToSpeech textToSpeech) {
+        this.itemsData = itemsData;
+        this.textToSpeech = textToSpeech;
     }
 
+    // Create new views (invoked by the layout manager)
     @Override
-    public int getCount() {
-        return arr.size();
+    public TranslateAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                   int viewType) {
+        // create a new view
+        View itemLayoutView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_translate, null);
+
+        // create ViewHolder
+
+        ViewHolder viewHolder = new ViewHolder(itemLayoutView);
+        return viewHolder;
     }
 
+    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public Object getItem(int i) {
-        return arr.get(i);
+    public void onBindViewHolder(ViewHolder viewHolder,final int position) {
+
+        // - get data from your itemsData at this position
+        // - replace the contents of the view with that itemsData
+
+        viewHolder.txtEn.setText(itemsData.get(position).getEn());
+        viewHolder.txtVi.setText(itemsData.get(position).getVi());
+        viewHolder.txtVi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                textToSpeech.speak(itemsData.get(position).getVi(), TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
+        viewHolder.txtEn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                textToSpeech.speak(itemsData.get(position).getEn(), TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
+
+
     }
 
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
+    // inner class to hold a reference to each item of RecyclerView
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        Holder holder = null;
-        if(holder == null){
-            holder = new Holder();
-            view = inflater.inflate(R.layout.item_translate,null,false);
-            holder.tvText = (TextView) view.findViewById(R.id.tvTranslate);
-            holder.tvTranslate = (TextView) view.findViewById(R.id.tvTranslateVi);
-            view.setTag(holder);
-        }else {
-            holder = (Holder) view.getTag();
+        public TextView txtEn,txtVi;
+
+        public ViewHolder(View itemLayoutView) {
+            super(itemLayoutView);
+            txtEn = (TextView) itemLayoutView.findViewById(R.id.tvTranslate);
+            txtVi = (TextView) itemLayoutView.findViewById(R.id.tvTranslateVi);
         }
-        holder.tvText.setText(arr.get(i).getEn());
-        holder.tvTranslate.setText(arr.get(i).getVi());
-        return view;
     }
 
-    private class Holder {
-        TextView tvText,tvTranslate;
+
+    // Return the size of your itemsData (invoked by the layout manager)
+    @Override
+    public int getItemCount() {
+        return itemsData.size();
     }
 }
+

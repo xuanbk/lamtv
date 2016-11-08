@@ -7,7 +7,10 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,9 +47,10 @@ public class TranslateFragment extends Fragment {
     String TAG = "TranslateFragmen";
     private LinearLayout lnBottom;
     private View view;
-    private ListView lsvTranslate;
+    private RecyclerView lsvTranslate;
     private ArrayList<Translate> translates;
     private TranslateAdapter adapter;
+    private TextToSpeech textToSpeech;
     public TranslateFragment() {
         // Required empty public constructor
     }
@@ -64,10 +68,21 @@ public class TranslateFragment extends Fragment {
                 promptSpeechInput();
             }
         });
-        lsvTranslate = (ListView)view.findViewById(R.id.lsvTranslte);
+        lsvTranslate = (RecyclerView) view.findViewById(R.id.lsvTranslte);
+        lsvTranslate.setLayoutManager(new LinearLayoutManager(getActivity()));
+        textToSpeech=new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    textToSpeech.setLanguage(new Locale("VN"));
+                }
+            }
+        });
         translates = new ArrayList<>();
-        adapter = new TranslateAdapter(getActivity(),translates);
+        adapter = new TranslateAdapter(translates,textToSpeech);
         lsvTranslate.setAdapter(adapter);
+
+
         return view;
     }
 
@@ -145,6 +160,7 @@ public class TranslateFragment extends Fragment {
                 super.onPostExecute(s);
                 translates.add(new Translate(text,s));
                 adapter.notifyDataSetChanged();
+                lsvTranslate.smoothScrollToPosition(translates.size()-1);
             }
         }.execute();
 
@@ -158,7 +174,6 @@ public class TranslateFragment extends Fragment {
         switch (requestCode) {
             case REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == getActivity().RESULT_OK && null != data) {
-
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     Log.d(TAG, "onActivityResult: " + result.get(0));
