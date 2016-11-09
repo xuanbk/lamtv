@@ -1,7 +1,7 @@
 package lamtv.project.com.myapplication.Object;
 
 /**
- * Created by Le Xuan on 07-Nov-16.
+ * Created by LamTV on 07-Nov-16.
  */
 
 public class Translate {

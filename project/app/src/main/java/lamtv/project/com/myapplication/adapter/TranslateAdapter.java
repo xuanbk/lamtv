@@ -18,7 +18,7 @@ import lamtv.project.com.myapplication.Object.Translate;
 import lamtv.project.com.myapplication.R;
 
 /**
- * Created by Le Xuan on 06-Nov-16.
+ * Created by LamTV on 06-Nov-16.
  */
 
 public class TranslateAdapter extends RecyclerView.Adapter<TranslateAdapter.ViewHolder> {
