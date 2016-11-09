@@ -5,12 +5,12 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/lsvTranslte"
-        android:dividerHeight="10dp"
-        android:divider="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/lnBottom"
         android:layout_margin="5dp"
-        android:layout_above="@+id/lnBottom"></android.support.v7.widget.RecyclerView>
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"></android.support.v7.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/lnBottom"
@@ -18,19 +18,52 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            android:src="@mipmap/english_flag"/>
-        <TextView
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="50dp"
-            android:text="Talk to here."
-            android:drawableRight="@android:drawable/ic_btn_speak_now"
-            android:textSize="16dp" />
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:id="@+id/lnEnglish">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:src="@mipmap/english_flag" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:drawableRight="@android:drawable/ic_btn_speak_now"
+                android:gravity="center_vertical"
+                android:text="English"
+                android:textSize="13dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lnVietnamese"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:src="@mipmap/vn_flag" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:drawableRight="@android:drawable/ic_btn_speak_now"
+                android:gravity="center_vertical"
+                android:text="VietNam"
+                android:textSize="13dp" />
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

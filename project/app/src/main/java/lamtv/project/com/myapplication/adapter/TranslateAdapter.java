@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.zip.Inflater;
 
 import lamtv.project.com.myapplication.Object.Translate;
@@ -47,12 +49,23 @@ public class TranslateAdapter extends RecyclerView.Adapter<TranslateAdapter.View
 
         // - get data from your itemsData at this position
         // - replace the contents of the view with that itemsData
-
+        if (itemsData.get(position).isEnglish()){
+            viewHolder.ivFlagEN.setBackgroundResource(R.mipmap.english_flag);
+            viewHolder.ivFlagVI.setBackgroundResource(R.mipmap.vn_flag);
+        }else {
+            viewHolder.ivFlagVI.setBackgroundResource(R.mipmap.english_flag);
+            viewHolder.ivFlagEN.setBackgroundResource(R.mipmap.vn_flag);
+        }
         viewHolder.txtEn.setText(itemsData.get(position).getEn());
         viewHolder.txtVi.setText(itemsData.get(position).getVi());
         viewHolder.txtVi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (itemsData.get(position).isEnglish()){
+                    textToSpeech.setLanguage(new Locale("vi_VN"));
+                }else {
+                    textToSpeech.setLanguage(Locale.ENGLISH);
+                }
 
                 textToSpeech.speak(itemsData.get(position).getVi(), TextToSpeech.QUEUE_FLUSH, null);
             }
@@ -60,6 +73,12 @@ public class TranslateAdapter extends RecyclerView.Adapter<TranslateAdapter.View
         viewHolder.txtEn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (itemsData.get(position).isEnglish()){
+
+                    textToSpeech.setLanguage(Locale.ENGLISH);
+                }else {
+                    textToSpeech.setLanguage(new Locale("vi_VN"));
+                }
                 textToSpeech.speak(itemsData.get(position).getEn(), TextToSpeech.QUEUE_FLUSH, null);
             }
         });
@@ -71,11 +90,13 @@ public class TranslateAdapter extends RecyclerView.Adapter<TranslateAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView txtEn,txtVi;
-
+        public ImageView ivFlagVI,ivFlagEN;
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             txtEn = (TextView) itemLayoutView.findViewById(R.id.tvTranslate);
             txtVi = (TextView) itemLayoutView.findViewById(R.id.tvTranslateVi);
+            ivFlagEN = (ImageView) itemLayoutView.findViewById(R.id.ivFlagEN);
+            ivFlagVI = (ImageView) itemLayoutView.findViewById(R.id.ivFlagVI);
         }
     }
 

@@ -7,10 +7,11 @@ package lamtv.project.com.myapplication.Object;
 public class Translate {
     private String en;
     private String vi;
-
-    public Translate(String en, String vi) {
+    private boolean isEnglish;
+    public Translate(String en, String vi, boolean isEnglish) {
         this.en = en;
         this.vi = vi;
+        this.isEnglish = isEnglish;
     }
 
     public String getEn() {
@@ -27,5 +28,13 @@ public class Translate {
 
     public void setVi(String vi) {
         this.vi = vi;
+    }
+
+    public boolean isEnglish() {
+        return isEnglish;
+    }
+
+    public void setEnglish(boolean english) {
+        isEnglish = english;
     }
 }

@@ -37,20 +37,19 @@ import javax.net.ssl.HttpsURLConnection;
 import lamtv.project.com.myapplication.Object.Translate;
 import lamtv.project.com.myapplication.R;
 import lamtv.project.com.myapplication.adapter.TranslateAdapter;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+
 
 
 public class TranslateFragment extends Fragment {
     private final int REQ_CODE_SPEECH_INPUT = 100;
     String TAG = "TranslateFragmen";
-    private LinearLayout lnBottom;
+    private LinearLayout lnEnglish,lnVietnamese;
     private View view;
     private RecyclerView lsvTranslate;
     private ArrayList<Translate> translates;
     private TranslateAdapter adapter;
     private TextToSpeech textToSpeech;
+    private boolean isEnglish = true;
     public TranslateFragment() {
         // Required empty public constructor
     }
@@ -61,11 +60,20 @@ public class TranslateFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_translate, container, false);
-        lnBottom = (LinearLayout) view.findViewById(R.id.lnBottom);
-        lnBottom.setOnClickListener(new View.OnClickListener() {
+        lnEnglish = (LinearLayout) view.findViewById(R.id.lnEnglish);
+        lnVietnamese = (LinearLayout) view.findViewById(R.id.lnVietnamese);
+        lnEnglish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                promptSpeechInput();
+                isEnglish = true;
+                promptSpeechInput(Locale.ENGLISH);
+            }
+        });
+        lnVietnamese.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isEnglish = false;
+                promptSpeechInput(new Locale("vi_VN"));
             }
         });
         lsvTranslate = (RecyclerView) view.findViewById(R.id.lsvTranslte);
@@ -74,7 +82,7 @@ public class TranslateFragment extends Fragment {
             @Override
             public void onInit(int status) {
                 if(status != TextToSpeech.ERROR) {
-                    textToSpeech.setLanguage(Locale.ENGLISH);
+                    textToSpeech.setLanguage(new Locale("vi_VN"));
                 }
             }
         });
@@ -86,11 +94,11 @@ public class TranslateFragment extends Fragment {
         return view;
     }
 
-    private void promptSpeechInput() {
+    private void promptSpeechInput(Locale locale) {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
                 getString(R.string.speech_prompt));
         try {
@@ -100,7 +108,7 @@ public class TranslateFragment extends Fragment {
         }
     }
 
-    private void Translate(final String text,final String from,final String to) {
+    private void translate(final String text,final String from,final String to) {
         final String url =
                 "https://www.googleapis.com/language/translate/v2?key=AIzaSyAWdBphWehwRizBWm3eOvoojU0XT5AOsRU&source=en&target=de&q=Hello";
         new AsyncTask<Void, Void, String>() {
@@ -158,7 +166,7 @@ public class TranslateFragment extends Fragment {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                translates.add(new Translate(text,s));
+                translates.add(new Translate(text,s,isEnglish));
                 adapter.notifyDataSetChanged();
                 lsvTranslate.smoothScrollToPosition(translates.size()-1);
             }
@@ -177,7 +185,11 @@ public class TranslateFragment extends Fragment {
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     Log.d(TAG, "onActivityResult: " + result.get(0));
-                    Translate(result.get(0),"en","vi");
+                    if (isEnglish) {
+                        translate(result.get(0), "en", "vi");
+                    }else {
+                        translate(result.get(0), "vi", "en");
+                    }
                 }
                 break;
             }
