@@ -74,7 +74,7 @@ public class TranslateFragment extends Fragment {
             @Override
             public void onInit(int status) {
                 if(status != TextToSpeech.ERROR) {
-                    textToSpeech.setLanguage(new Locale("VN"));
+                    textToSpeech.setLanguage(Locale.ENGLISH);
                 }
             }
         });
