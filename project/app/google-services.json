@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1019670238798",
+    "firebase_url": "https://apptravel-e97e3.firebaseio.com",
+    "project_id": "apptravel-e97e3",
+    "storage_bucket": "apptravel-e97e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019670238798:android:5e4027f9e93c1e10",
+        "android_client_info": {
+          "package_name": "lamtv.project.com.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1019670238798-vvtnvncuq1c4btt0o18fomn5cjkcu2i4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEmtL7NudBHCExTBR2-XJLqYW_UQQBl30"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

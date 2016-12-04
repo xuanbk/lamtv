@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "lamtv.project.com.myapplication"
         minSdkVersion 16
@@ -29,4 +29,6 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.2'
     compile 'com.google.code.gson:gson:2.8.0'
     testCompile 'junit:junit:4.12'
+    compile 'com.google.firebase:firebase-database:10.0.1'
 }
+apply plugin: 'com.google.gms.google-services'
