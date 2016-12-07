@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import lamtv.project.com.myapplication.Object.Travles;
 import lamtv.project.com.myapplication.fragment.InfoFragment;
+import lamtv.project.com.myapplication.fragment.MapFragment;
 
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -22,12 +23,13 @@ public class DetailActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        travles = (Travles) getIntent().getSerializableExtra("TRAVLES");
-        tvTitle = (TextView) findViewById(R.id.tvTitle);
-        tvTitle.setText(travles.getName());
-        InfoFragment infoFragment = new InfoFragment(travles);
+//        travles = (Travles) getIntent().getSerializableExtra("TRAVLES");
+//        tvTitle = (TextView) findViewById(R.id.tvTitle);
+//        tvTitle.setText(travles.getName());
+        travles = new Travles();
+        MapFragment mapFragment = new MapFragment(travles);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame, infoFragment);
+        transaction.replace(R.id.frame, mapFragment);
         transaction.commit();
     }
 }
