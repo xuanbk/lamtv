@@ -23,6 +23,12 @@
             android:textSize="15dp"
             android:textStyle="bold"
             android:textColor="#fff" />
+        <Button
+            android:id="@+id/btnMap"
+            android:text="Map"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
     <FrameLayout
         android:id="@+id/frame"
