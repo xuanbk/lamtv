@@ -17,7 +17,7 @@ import android.widget.TextView;
  */
 
 public class DetailActivity extends FragmentActivity {
-    private TextView tvTitle;
+    private TextView tvTitle,tvTitle1;
     private Travles travles;
     private Button btnMap;
     @Override
@@ -27,6 +27,8 @@ public class DetailActivity extends FragmentActivity {
         travles = (Travles) getIntent().getSerializableExtra("TRAVLES");
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvTitle.setText(travles.getName());
+        tvTitle1 = (TextView)findViewById(R.id.tvTitle1);
+        tvTitle1.setText(travles.getLoacation());
         InfoFragment mapFragment = new InfoFragment(travles);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame, mapFragment);

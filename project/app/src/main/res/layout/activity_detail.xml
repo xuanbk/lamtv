@@ -18,9 +18,21 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
             android:text="Search"
             android:textSize="15dp"
+            android:layout_marginTop="5dp"
+            android:textStyle="bold"
+            android:textColor="#fff" />
+        <TextView
+            android:id="@+id/tvTitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTitle"
+            android:layout_centerHorizontal="true"
+            android:text="Search"
+            android:textSize="10dp"
             android:textStyle="bold"
             android:textColor="#fff" />
         <Button
