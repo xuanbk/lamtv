@@ -78,6 +78,23 @@ public class Document {
             return -1;
         }
     }
+    public ArrayList<String> getHtml_instructions(org.w3c.dom.Document doc) {
+        NodeList nl1, nl2, nl3;
+        ArrayList<String> listGeopoints = new ArrayList<String>();
+        nl1 = doc.getElementsByTagName("step");
+        if (nl1.getLength() > 0) {
+            for (int i = 0; i < nl1.getLength(); i++) {
+                Node node1 = nl1.item(i);
+                nl2 = node1.getChildNodes();
+                Node node111= nl2
+                        .item(getNodeIndex(nl2, "html_instructions"));
+                Log.i("html_instructions", node111.getTextContent());
+                listGeopoints.add(node111.getTextContent());
+            }
+        }
+
+        return listGeopoints;
+    }
 
     public String getDistanceText(org.w3c.dom.Document doc) {
         /*
@@ -180,6 +197,9 @@ public class Document {
 
                 Node locationNode = nl2
                         .item(getNodeIndex(nl2, "start_location"));
+                Node html_ins = nl2
+                        .item(getNodeIndex(nl2, "html_instructions"));
+                Log.wtf("html","html = " + html_ins.getNodeValue());
                 nl3 = locationNode.getChildNodes();
                 Node latNode = nl3.item(getNodeIndex(nl3, "lat"));
                 double lat = Double.parseDouble(latNode.getTextContent());
