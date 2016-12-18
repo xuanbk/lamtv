@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,11 +41,10 @@ import lamtv.project.com.myapplication.Object.Travles;
 import lamtv.project.com.myapplication.R;
 import lamtv.project.com.myapplication.adapter.TranslateAdapter;
 
-
 public class InfoFragment extends Fragment {
     private View view;
     private Travles travles;
-    private TextView tvDescription;
+    private WebView tvDescription;
     private ImageView imgTravelsTop,imgTravelsBottom;
     public InfoFragment(Travles travles) {
         // Required empty public constructor
@@ -57,7 +57,7 @@ public class InfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_info_travles, container, false);
-        tvDescription = (TextView) view.findViewById(R.id.tvDescription);
+        tvDescription = (WebView) view.findViewById(R.id.tvDescription);
         imgTravelsBottom = (ImageView) view.findViewById(R.id.imgTralvesBottom);
         imgTravelsTop = (ImageView)view.findViewById(R.id.imgTralvesTop);
         Glide.with(getActivity())
@@ -70,7 +70,13 @@ public class InfoFragment extends Fragment {
                 .crossFade()
                 .placeholder(R.mipmap.ic_launcher)
                 .into(imgTravelsBottom);
-        tvDescription.setText(travles.getDescription());
+
+        String text = "<html><body>"
+                + "<p align=\"justify\">"
+                + travles.getDescription()
+                + "</p> "
+                + "</body></html>";
+        tvDescription.loadDataWithBaseURL (null,text, "text/html", "utf-8", null);
         return view;
     }
 

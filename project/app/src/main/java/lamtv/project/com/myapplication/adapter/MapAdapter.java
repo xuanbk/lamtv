@@ -39,7 +39,6 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
     }
 
     // Create new views (invoked by the layout manager)
-    @Override
     public MapAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                     int viewType) {
         // create a new view

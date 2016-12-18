@@ -50,11 +50,18 @@
 
         </activity>
         <activity
-            android:name=".DetailActivity"
+            android:name=".MapSearchActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".DetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".MapsActivity"
             android:screenOrientation="portrait">>
         </activity>
+
     </application>
 </manifest>

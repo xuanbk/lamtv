@@ -7,9 +7,7 @@ import android.view.View;
 
 import lamtv.project.com.myapplication.fragment.SearchFragment;
 
-/**
- * Created by Administrator on 12/08/2016.
- */
+
 
 public class DefaultActitivy extends Activity {
     @Override
@@ -27,6 +25,12 @@ public class DefaultActitivy extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(DefaultActitivy.this, MainActivity.class));
+            }
+        });
+        findViewById(R.id.Map_search).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DefaultActitivy.this, MapSearchActivity.class));
             }
         });
     }
