@@ -19,9 +19,6 @@ import lamtv.project.com.myapplication.DetailActivity;
 import lamtv.project.com.myapplication.Object.Travles;
 import lamtv.project.com.myapplication.R;
 
-/**
- * Created by XLV on 12/5/16.
- */
 
 public class MapAdapter extends RecyclerView.Adapter<MapAdapter.ViewHolder> {
     private ArrayList<String>mDataset;

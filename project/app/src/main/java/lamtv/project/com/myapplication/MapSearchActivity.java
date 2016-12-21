@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ import lamtv.project.com.myapplication.fragment.DirectionFinder;
 public class MapSearchActivity extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener {
     private GoogleMap mMap;
     private Button btnFindPath;
+    private ImageView Imgfindpath;
     private EditText etOrigin;
     private EditText etDestination;
     private List<Marker> originMarkers = new ArrayList<>();
@@ -53,11 +55,11 @@ public class MapSearchActivity extends FragmentActivity implements OnMapReadyCal
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        btnFindPath = (Button) findViewById(R.id.btnFindPath);
+        Imgfindpath = (ImageView) findViewById(R.id.imgfindpath);
         etOrigin = (EditText) findViewById(R.id.etOrigin);
         etDestination = (EditText) findViewById(R.id.etDestination);
 
-        btnFindPath.setOnClickListener(new View.OnClickListener() {
+        Imgfindpath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendRequest();
@@ -141,7 +143,7 @@ public class MapSearchActivity extends FragmentActivity implements OnMapReadyCal
 
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
-            ((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
+           /// ((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
             ((TextView) findViewById(R.id.tvDistance)).setText(route.distance.text);
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()

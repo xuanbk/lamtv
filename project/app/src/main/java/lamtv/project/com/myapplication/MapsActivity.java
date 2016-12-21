@@ -106,7 +106,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             arr.addAll(md.getHtml_instructions(result));
             mAdapter.notifyDataSetChanged();
             ArrayList<LatLng> directionPoint = md.getDirection(result);
-            PolylineOptions rectLine = new PolylineOptions().width(10).color(Color.RED); // Màu và độ rộng[/FONT]
+            PolylineOptions rectLine = new PolylineOptions().width(10).color(Color.BLUE); // Màu và độ rộng[/FONT]
             for(int i = 0 ; i < directionPoint.size() ; i++) {
                 rectLine.add(directionPoint.get(i));
             }
