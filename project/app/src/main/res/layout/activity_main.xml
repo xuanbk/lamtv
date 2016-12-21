@@ -1,12 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-   <fragment
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:id="@+id/headlines_fragment"
-       android:name="lamtv.project.com.myapplication.fragment.TranslateFragment"></fragment>
-</LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/view"></FrameLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/lnBottom"
+        android:background="#c2c2c2"></View>
+
+    <LinearLayout
+        android:id="@+id/lnBottom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/Travels"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:textColor="#ffff"
+            android:layout_weight="1"
+            android:background="@drawable/bg_button_on"
+            android:text="Travels" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="#030303"></View>
+
+            <Button
+                android:id="@+id/Translate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_button_off"
+                android:text="Translate" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:background="#030303"></View>
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/Map_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_button_off"
+            android:text="Map" />
+    </LinearLayout>
+</RelativeLayout>

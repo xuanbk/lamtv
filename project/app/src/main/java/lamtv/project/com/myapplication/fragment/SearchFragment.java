@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,7 +35,7 @@ import lamtv.project.com.myapplication.Object.Travles;
 import lamtv.project.com.myapplication.R;
 import lamtv.project.com.myapplication.adapter.MyAdapter;
 
-public class SearchFragment extends Activity implements View.OnClickListener {
+public class SearchFragment extends Fragment implements View.OnClickListener {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -46,18 +47,21 @@ public class SearchFragment extends Activity implements View.OnClickListener {
     private EditText etSearch;
     private final int REQ_CODE_SPEECH_INPUT = 100;
 
+    public SearchFragment() {
+    }
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_search);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_search,null,false);
         arr = new ArrayList<>();
         arrTemp = new ArrayList<>();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         Query recentPostsQuery = mDatabase.child("travles")
                 .limitToFirst(100);
-        ivBack = (ImageView) findViewById(R.id.btnBack);
-        ivSpeech = (ImageView) findViewById(R.id.ivSpeech);
-        etSearch = (EditText) findViewById(R.id.etSearch);
+        ivBack = (ImageView) view.findViewById(R.id.btnBack);
+        ivSpeech = (ImageView) view.findViewById(R.id.ivSpeech);
+        etSearch = (EditText) view.findViewById(R.id.etSearch);
         ivBack.setOnClickListener(this);
         ivSpeech.setOnClickListener(this);
         etSearch.addTextChangedListener(new TextWatcher() {
@@ -82,18 +86,18 @@ public class SearchFragment extends Activity implements View.OnClickListener {
 
             }
         });
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(arr, this);
+        mAdapter = new MyAdapter(arr, getActivity());
         mRecyclerView.setAdapter(mAdapter);
         recentPostsQuery.addChildEventListener(new ChildEventListener() {
             @Override
@@ -135,7 +139,9 @@ public class SearchFragment extends Activity implements View.OnClickListener {
             }
 
         });
+        return view;
     }
+
 
     private void promptSpeechInput(Locale locale) {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -157,7 +163,7 @@ public class SearchFragment extends Activity implements View.OnClickListener {
 
         switch (requestCode) {
             case REQ_CODE_SPEECH_INPUT: {
-                if (resultCode == RESULT_OK && null != data) {
+                if (resultCode == getActivity().RESULT_OK && null != data) {
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     Log.d("", "onActivityResult: " + result.get(0));
@@ -173,9 +179,6 @@ public class SearchFragment extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnBack:
-                finish();
-                break;
             case R.id.ivSpeech:
                 promptSpeechInput(Locale.ENGLISH);
                 break;

@@ -4,10 +4,14 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,7 +39,7 @@ import lamtv.project.com.myapplication.fragment.DirectionFinderListener;
 import lamtv.project.com.myapplication.fragment.DirectionFinder;
 
 
-public class MapSearchActivity extends FragmentActivity implements OnMapReadyCallback,DirectionFinderListener {
+public class MapSearchActivity extends Fragment implements OnMapReadyCallback,DirectionFinderListener {
     private GoogleMap mMap;
     private Button btnFindPath;
     private ImageView Imgfindpath;
@@ -45,37 +49,39 @@ public class MapSearchActivity extends FragmentActivity implements OnMapReadyCal
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
     private ProgressDialog progressDialog;
-
+    private TextView tvDistance;
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps_search);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_maps_search,null,false);
+        SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Imgfindpath = (ImageView) findViewById(R.id.imgfindpath);
-        etOrigin = (EditText) findViewById(R.id.etOrigin);
-        etDestination = (EditText) findViewById(R.id.etDestination);
-
+        Imgfindpath = (ImageView) view.findViewById(R.id.imgfindpath);
+        etOrigin = (EditText) view.findViewById(R.id.etOrigin);
+        etDestination = (EditText) view.findViewById(R.id.etDestination);
+        tvDistance = (TextView) view.findViewById(R.id.tvDistance);
         Imgfindpath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendRequest();
             }
         });
+        return view;
     }
+
+
 
     private void sendRequest() {
         String origin = etOrigin.getText().toString();
         String destination = etDestination.getText().toString();
         if (origin.isEmpty()) {
-            Toast.makeText(this, "Please enter origin address!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
             return;
         }
         if (destination.isEmpty()) {
-            Toast.makeText(this, "Please enter destination address!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Please enter destination address!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -95,7 +101,7 @@ public class MapSearchActivity extends FragmentActivity implements OnMapReadyCal
                 .title("Hà Nội")
                 .position(hn)));
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -111,7 +117,7 @@ public class MapSearchActivity extends FragmentActivity implements OnMapReadyCal
 
     @Override
     public void onDirectionFinderStart() {
-        progressDialog = ProgressDialog.show(this, "Please wait.",
+        progressDialog = ProgressDialog.show(getActivity(), "Please wait.",
                 "Finding direction..!", true);
 
         if (originMarkers != null) {
@@ -144,7 +150,7 @@ public class MapSearchActivity extends FragmentActivity implements OnMapReadyCal
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
            /// ((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
-            ((TextView) findViewById(R.id.tvDistance)).setText(route.distance.text);
+           tvDistance.setText(route.distance.text);
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue))

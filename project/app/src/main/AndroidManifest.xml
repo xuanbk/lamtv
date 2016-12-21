@@ -35,23 +35,17 @@
         <activity
             android:name=".DefaultActitivy"
             android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity
-            android:name=".fragment.SearchFragment"
-            android:screenOrientation="portrait">>
-
-        </activity>
-        <activity
-            android:name=".MapSearchActivity"
-            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".DetailActivity"
             android:screenOrientation="portrait"
