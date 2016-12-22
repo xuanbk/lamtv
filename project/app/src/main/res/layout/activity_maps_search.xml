@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="lamtv.project.com.myapplication.MapSearchActivity"
+    tools:context="lamtv.project.com.myapplication.fragment.MapSearchFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -60,12 +60,11 @@
 
     </LinearLayout>
 
-
-    <fragment
+    <com.google.android.gms.maps.MapView
         android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="350dp"
-        android:layout_weight="0.08" />
+        android:layout_weight="0.08"></com.google.android.gms.maps.MapView>
+
 
 </LinearLayout>

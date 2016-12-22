@@ -1,4 +1,4 @@
-package lamtv.project.com.myapplication;
+package lamtv.project.com.myapplication.fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -32,14 +33,16 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 import lamtv.project.com.myapplication.Object.Route;
+import lamtv.project.com.myapplication.R;
 import lamtv.project.com.myapplication.fragment.DirectionFinderListener;
 import lamtv.project.com.myapplication.fragment.DirectionFinder;
 
 
-public class MapSearchActivity extends Fragment implements OnMapReadyCallback,DirectionFinderListener {
+public class MapSearchFragment extends Fragment implements OnMapReadyCallback,DirectionFinderListener {
     private GoogleMap mMap;
     private Button btnFindPath;
     private ImageView Imgfindpath;
@@ -50,13 +53,13 @@ public class MapSearchActivity extends Fragment implements OnMapReadyCallback,Di
     private List<Polyline> polylinePaths = new ArrayList<>();
     private ProgressDialog progressDialog;
     private TextView tvDistance;
+    private MapView mapView;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_maps_search,null,false);
-        SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        mapView =(MapView) view.findViewById(R.id.map);
+        mapView.getMapAsync(this);
 
         Imgfindpath = (ImageView) view.findViewById(R.id.imgfindpath);
         etOrigin = (EditText) view.findViewById(R.id.etOrigin);
