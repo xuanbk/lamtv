@@ -12,6 +12,7 @@ import lamtv.project.com.myapplication.fragment.TranslateFragment;
 
 public class MainActivity extends FragmentActivity {
     private Button btnTravel,btnTranslate,btnMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

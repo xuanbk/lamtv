@@ -1,5 +1,6 @@
 package lamtv.project.com.myapplication.fragment;
 
+
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import lamtv.project.com.myapplication.Application;
 import lamtv.project.com.myapplication.Object.Translate;
 import lamtv.project.com.myapplication.R;
 import lamtv.project.com.myapplication.adapter.TranslateAdapter;
@@ -50,6 +52,8 @@ public class TranslateFragment extends Fragment {
     private TranslateAdapter adapter;
     private TextToSpeech textToSpeech;
     private boolean isEnglish = true;
+    private Application application;
+    private String translateAPIkey= "AIzaSyDD79kYXGrXhJoj2lfa8cSuav4JZCBkKCw";
     public TranslateFragment() {
         // Required empty public constructor
     }
@@ -60,6 +64,7 @@ public class TranslateFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_translate, container, false);
+        application = (lamtv.project.com.myapplication.Application)getActivity().getApplication();
         lnEnglish = (LinearLayout) view.findViewById(R.id.lnEnglish);
         lnVietnamese = (LinearLayout) view.findViewById(R.id.lnVietnamese);
         lnEnglish.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +91,7 @@ public class TranslateFragment extends Fragment {
                 }
             }
         });
-        translates = new ArrayList<>();
+        translates = application.getTranslates();
         adapter = new TranslateAdapter(translates,textToSpeech);
         lsvTranslate.setAdapter(adapter);
 
@@ -109,8 +114,6 @@ public class TranslateFragment extends Fragment {
     }
 
     private void translate(final String text,final String from,final String to) {
-        final String url =
-                "https://www.googleapis.com/language/translate/v2?key=AIzaSyAWdBphWehwRizBWm3eOvoojU0XT5AOsRU&source=en&target=de&q=Hello";
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... voids) {
@@ -118,7 +121,7 @@ public class TranslateFragment extends Fragment {
                 String translatedText = "";
                 try {
                     String encodedText = URLEncoder.encode(text, "UTF-8");
-                    String urlStr = "https://www.googleapis.com/language/translate/v2?key=AIzaSyAXBVkmF8RaaSX9TEzQZ0bUSv53LTjXeZ0" + "&q=" + encodedText + "&target=" + to + "&source=" + from;
+                    String urlStr = "https://www.googleapis.com/language/translate/v2?key=" +translateAPIkey + "&q=" + encodedText + "&target=" + to + "&source=" + from;
 
                     URL url = new URL(urlStr);
 
@@ -207,5 +210,9 @@ public class TranslateFragment extends Fragment {
         super.onDetach();
     }
 
-
+    @Override
+    public void onDestroy() {
+        application.setTranslates(translates);
+        super.onDestroy();
+    }
 }

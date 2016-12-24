@@ -4,11 +4,14 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +46,7 @@ import lamtv.project.com.myapplication.fragment.DirectionFinderListener;
 import lamtv.project.com.myapplication.fragment.DirectionFinder;
 
 
-public class MapSearchFragment extends Fragment implements OnMapReadyCallback,DirectionFinderListener {
+public class MapSearchFragment extends Fragment implements OnMapReadyCallback, DirectionFinderListener {
     private GoogleMap mMap;
     private Button btnFindPath;
     private ImageView Imgfindpath;
@@ -54,11 +58,12 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback,Di
     private ProgressDialog progressDialog;
     private TextView tvDistance;
     private MapView mapView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_maps_search,container,false);
-        mapView =(MapView) view.findViewById(R.id.map);
+        View view = inflater.inflate(R.layout.activity_maps_search, container, false);
+        mapView = (MapView) view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
@@ -76,7 +81,6 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback,Di
     }
 
 
-
     private void sendRequest() {
         String origin = etOrigin.getText().toString();
         String destination = etDestination.getText().toString();
@@ -85,14 +89,24 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback,Di
             return;
         }
         if (destination.isEmpty()) {
-            Toast.makeText(getActivity(), "Please enter destination address!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+            Geocoder geocoder = new Geocoder(getActivity());
+            try {
+                Address address = geocoder.getFromLocationName(origin, 1).get(0);
+                LatLng hn = new LatLng(address.getLatitude(), address.getLongitude());
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hn, 16));
+                originMarkers.add(mMap.addMarker(new MarkerOptions()
+                        .title(origin)
+                        .position(hn)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
 
-        try {
-            new DirectionFinder(this, origin, destination).execute();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            try {
+                new DirectionFinder(this, origin, destination).execute();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -137,7 +151,7 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback,Di
         }
 
         if (polylinePaths != null) {
-            for (Polyline polyline:polylinePaths ) {
+            for (Polyline polyline : polylinePaths) {
                 polyline.remove();
             }
         }
@@ -153,8 +167,8 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback,Di
 
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
-           /// ((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
-           tvDistance.setText(route.distance.text);
+            /// ((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
+            tvDistance.setText(route.distance.text);
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue))
@@ -176,21 +190,25 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback,Di
             polylinePaths.add(mMap.addPolyline(polylineOptions));
         }
     }
+
     @Override
     public void onResume() {
         mapView.onResume();
         super.onResume();
     }
+
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
     }
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();
