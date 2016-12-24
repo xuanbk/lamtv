@@ -1,30 +1,28 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="lamtv.project.com.myapplication.fragment.MapSearchFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    tools:context="lamtv.project.com.myapplication.fragment.MapSearchFragment">
 
     <EditText
+        android:id="@+id/etOrigin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/etOrigin"
         android:hint="Choose starting point" />
 
     <EditText
+        android:id="@+id/etDestination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Choose destination"
-        android:id="@+id/etDestination" />
+        android:hint="Choose destination" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="0.51"
         android:weightSum="1">
         <!--<Button
             android:layout_width="76dp"
@@ -35,36 +33,44 @@
 
         <ImageView
             android:id="@+id/imgfindpath"
-            android:layout_marginRight="5dp"
-            android:layout_width="60dp"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/directions"
-            android:layout_height="42dp" />
-
-        <ImageView
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
             android:layout_width="60dp"
             android:layout_height="42dp"
-            android:src="@drawable/ic_maps"
-            android:id="@+id/imageView" />
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/directions" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="60dp"
+            android:layout_height="42dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/ic_maps" />
 
         <TextView
-            android:layout_marginLeft="25dp"
-            android:layout_width="45dp"
-            android:layout_marginTop="15dp"
-            android:layout_height="30dp"
-            android:text="0 km"
             android:id="@+id/tvDistance"
-            android:layout_weight="0.10" />
+            android:layout_width="45dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_weight="0.10"
+            android:text="0 km" />
 
     </LinearLayout>
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_weight="0.08"></com.google.android.gms.maps.MapView>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></com.google.android.gms.maps.MapView>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcvMap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"></android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 </LinearLayout>
