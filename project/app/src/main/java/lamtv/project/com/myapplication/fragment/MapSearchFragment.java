@@ -11,6 +11,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +44,9 @@ import java.util.Map;
 
 import lamtv.project.com.myapplication.Object.Route;
 import lamtv.project.com.myapplication.R;
+import lamtv.project.com.myapplication.Utils.Utils;
+import lamtv.project.com.myapplication.adapter.Map2Adapter;
+import lamtv.project.com.myapplication.adapter.MapAdapter;
 import lamtv.project.com.myapplication.fragment.DirectionFinderListener;
 import lamtv.project.com.myapplication.fragment.DirectionFinder;
 
@@ -49,7 +54,7 @@ import lamtv.project.com.myapplication.fragment.DirectionFinder;
 public class MapSearchFragment extends Fragment implements OnMapReadyCallback, DirectionFinderListener {
     private GoogleMap mMap;
     private Button btnFindPath;
-    private ImageView Imgfindpath;
+    private ImageView Imgfindpath,imageView;
     private EditText etOrigin;
     private EditText etDestination;
     private List<Marker> originMarkers = new ArrayList<>();
@@ -58,7 +63,10 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
     private ProgressDialog progressDialog;
     private TextView tvDistance;
     private MapView mapView;
-
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private ArrayList<String> arr;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,29 +74,80 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
         mapView = (MapView) view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
-
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rcvMap);
+        mRecyclerView.setHasFixedSize(true);
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        // specify an adapter (see also next example)
+        arr = new ArrayList<>();
+        mAdapter = new MapAdapter(arr, getActivity());
+        mRecyclerView.setAdapter(mAdapter);
         Imgfindpath = (ImageView) view.findViewById(R.id.imgfindpath);
         etOrigin = (EditText) view.findViewById(R.id.etOrigin);
         etDestination = (EditText) view.findViewById(R.id.etDestination);
         tvDistance = (TextView) view.findViewById(R.id.tvDistance);
+        imageView = (ImageView) view.findViewById(R.id.imageView);
         Imgfindpath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendRequest();
+                if (Utils.checkInternet(getActivity())) {
+                    mapView.setVisibility(View.VISIBLE);
+                    mRecyclerView.setVisibility(View.GONE);
+                    sendRequest(true);
+                }else {
+                    Toast.makeText(getActivity(), "No network access", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Utils.checkInternet(getActivity())) {
+                    mapView.setVisibility(View.GONE);
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    arr.clear();
+                    mAdapter.notifyDataSetChanged();
+                    sendRequest(false);
+                }else {
+                    Toast.makeText(getActivity(), "No network access", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         return view;
     }
 
 
-    private void sendRequest() {
+    private void sendRequest(boolean isFind) {
         String origin = etOrigin.getText().toString();
         String destination = etDestination.getText().toString();
         if (origin.isEmpty()) {
             Toast.makeText(getActivity(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (destination.isEmpty() &&!isFind) {
+            Toast.makeText(getActivity(), "Please enter destination address!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (destination.isEmpty()) {
+            if (originMarkers != null) {
+                for (Marker marker : originMarkers) {
+                    marker.remove();
+                }
+            }
+
+            if (destinationMarkers != null) {
+                for (Marker marker : destinationMarkers) {
+                    marker.remove();
+                }
+            }
+
+            if (polylinePaths != null) {
+                for (Polyline polyline : polylinePaths) {
+                    polyline.remove();
+                }
+            }
+            tvDistance.setText("0.0 Km");
             Geocoder geocoder = new Geocoder(getActivity());
             try {
                 Address address = geocoder.getFromLocationName(origin, 1).get(0);
@@ -161,10 +220,12 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
         progressDialog.dismiss();
+        arr.clear();
+        arr.addAll(routes.get(0).html_instructions);
+        mAdapter.notifyDataSetChanged();
         polylinePaths = new ArrayList<>();
         originMarkers = new ArrayList<>();
         destinationMarkers = new ArrayList<>();
-
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
             /// ((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
