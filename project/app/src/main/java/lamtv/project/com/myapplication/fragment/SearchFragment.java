@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -31,8 +32,11 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 
+import lamtv.project.com.myapplication.Application;
+import lamtv.project.com.myapplication.HistoryActivity;
 import lamtv.project.com.myapplication.Object.Travles;
 import lamtv.project.com.myapplication.R;
+import lamtv.project.com.myapplication.Utils.Utils;
 import lamtv.project.com.myapplication.adapter.MyAdapter;
 
 public class SearchFragment extends Fragment implements View.OnClickListener {
@@ -46,6 +50,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     private ImageView ivBack, ivSpeech;
     private EditText etSearch;
     private final int REQ_CODE_SPEECH_INPUT = 100;
+    private String[] ids;
+    private String id;
+    private Application application;
 
     public SearchFragment() {
     }
@@ -53,15 +60,42 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search,null,false);
+        View view = inflater.inflate(R.layout.fragment_search, null, false);
         arr = new ArrayList<>();
         arrTemp = new ArrayList<>();
+        application = (Application) getActivity().getApplication();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         Query recentPostsQuery = mDatabase.child("travles")
                 .limitToFirst(100);
         ivBack = (ImageView) view.findViewById(R.id.btnBack);
         ivSpeech = (ImageView) view.findViewById(R.id.ivSpeech);
         etSearch = (EditText) view.findViewById(R.id.etSearch);
+        Button btnHistory = (Button) view.findViewById(R.id.btnHistory);
+        btnHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<Travles> arrayList = new ArrayList<Travles>();
+                id = Utils.getIdLike(getActivity());
+                ids = id.split(",");
+                for (int i = 0; i < arrTemp.size(); i++) {
+                    for (int j = 0; j < ids.length; j++) {
+                        if (ids[j].equals(arr.get(i).getId())) {
+                            Travles travles = arrTemp.get(i);
+                            travles.setLike("1");
+                            arrayList.add(travles);
+                            break;
+                        }
+                    }
+                }
+                application.setArrTemp(arrayList);
+                startActivity(new Intent(getActivity(), HistoryActivity.class));
+            }
+        });
+        id = Utils.getIdLike(getActivity());
+        Log.d("", "ID = " + id);
+        if (!id.equals("")) {
+            ids = id.split(",");
+        }
         ivBack.setOnClickListener(this);
         ivSpeech.setOnClickListener(this);
         etSearch.addTextChangedListener(new TextWatcher() {
@@ -76,6 +110,16 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 for (Travles travles : arrTemp) {
                     if (travles.getName().toLowerCase().contains(s.toString().toLowerCase())) {
                         arr.add(travles);
+                    }
+                }
+                id = Utils.getIdLike(getActivity());
+                ids = id.split(",");
+                for (int i = 0; i < arr.size(); i++) {
+                    arr.get(i).setLike("");
+                    for (int j = 0; j < ids.length; j++) {
+                        if (ids[j].equals(arr.get(i).getId())) {
+                            arr.get(i).setLike("1");
+                        }
                     }
                 }
                 mAdapter.notifyDataSetChanged();
@@ -97,7 +141,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(arr, getActivity());
+        mAdapter = new MyAdapter(arr, getActivity(),false);
         mRecyclerView.setAdapter(mAdapter);
         recentPostsQuery.addChildEventListener(new ChildEventListener() {
             @Override
@@ -105,10 +149,16 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 Map<String, String> value = (Map<String, String>) snapshot.getValue();
                 Travles travles = new Travles();
                 travles.setId(snapshot.getKey());
+                if (ids != null) {
+                    for (int i = 0; i < ids.length; i++) {
+                        if (ids[i].equals(travles.getId())) {
+                            travles.setLike("1");
+                        }
+                    }
+                }
                 travles.setCoordinate_1(value.get("coordinate_1"));
                 travles.setCoordinate_2(value.get("coordinate_2"));
                 travles.setDescription(value.get("description"));
-                travles.setLike(value.get("like"));
                 travles.setLinkimage_1(value.get("linkimage_1"));
                 travles.setLinkimage_2(value.get("linkimage_2"));
                 travles.setLoacation(value.get("loacation"));
@@ -142,6 +192,23 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!id.equals(Utils.getIdLike(getActivity()))) {
+            id = Utils.getIdLike(getActivity());
+            ids = id.split(",");
+            for (int i = 0; i < arr.size(); i++) {
+                arr.get(i).setLike("");
+                for (int j = 0; j < ids.length; j++) {
+                    if (ids[j].equals(arr.get(i).getId())) {
+                        arr.get(i).setLike("1");
+                    }
+                }
+            }
+            mAdapter.notifyDataSetChanged();
+        }
+    }
 
     private void promptSpeechInput(Locale locale) {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);

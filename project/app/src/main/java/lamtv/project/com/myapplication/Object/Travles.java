@@ -11,7 +11,7 @@ public class Travles implements Serializable{
     private String coordinate_1;
     private String coordinate_2;
     private String description;
-    private String like;
+    private String like="";
     private String linkimage_1;
     private String linkimage_2;
     private String loacation;

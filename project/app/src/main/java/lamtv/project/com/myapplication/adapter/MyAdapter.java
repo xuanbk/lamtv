@@ -23,9 +23,10 @@ import lamtv.project.com.myapplication.R;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private ArrayList<Travles>mDataset;
     private Context context;
+    private boolean isHistory;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mTextView,tvName;
-        public ImageView imgTravles;
+        public ImageView imgTravles,imvLike;
         public CardView card_view;
         public ViewHolder(View v) {
             super(v);
@@ -33,11 +34,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             tvName = (TextView) v.findViewById(R.id.tvName);
             imgTravles=(ImageView)v.findViewById(R.id.imgTralves);
             card_view = (CardView)v.findViewById(R.id.card_view);
+            imvLike = (ImageView) v.findViewById(R.id.imvLike);
         }
     }
-    public MyAdapter(ArrayList<Travles>mDataset, Context context) {
+    public MyAdapter(ArrayList<Travles>mDataset, Context context, boolean isHistory) {
         this.mDataset = mDataset;
         this.context = context;
+        this.isHistory = isHistory;
     }
 
     // Create new views (invoked by the layout manager)
@@ -64,6 +67,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("TRAVLES",mDataset.get(position));
+                intent.putExtra("HISTORY",isHistory);
                 context.startActivity(intent);
             }
         });
@@ -72,7 +76,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 .crossFade()
                 .centerCrop()
                 .into(holder.imgTravles);
-
+        if (mDataset.get(position).getLike().equals("1")){
+            holder.imvLike.setVisibility(View.VISIBLE);
+        }else {
+            holder.imvLike.setVisibility(View.GONE);
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
