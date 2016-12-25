@@ -76,7 +76,7 @@ public class DetailActivity extends AppCompatActivity {
         } else {
             imvLike.setImageDrawable(getResources().getDrawable(R.drawable.like_1));
         }
-        if (!getIntent().getBooleanExtra("HISTORY", false)) {
+        if (!getIntent().getBooleanExtra("HISTORY", false)) {//favorite-HISTORY
             imvLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

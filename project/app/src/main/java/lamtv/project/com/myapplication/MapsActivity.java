@@ -82,9 +82,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         LatLng mylocation;
         if (location == null) {
-            mylocation = new LatLng(21.0489522, 105.7832983);
+            mylocation = new LatLng(21.048928, 105.785468);
         } else {
             mylocation = new LatLng(location.getLatitude(), location.getLongitude());
+
         }
         mMap.addMarker(new MarkerOptions().position(mylocation).title(""));
         mMap.addMarker(new MarkerOptions().position(endLocation).title(travles.getName()));
@@ -104,7 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng mylocation;
             org.w3c.dom.Document doc;
             if (location == null) {
-                mylocation = new LatLng(21.0489522, 105.7832983);
+                mylocation = new LatLng(21.048928, 105.785468);
                 doc = md.getDocument(mylocation, endLocation, lamtv.project.com.myapplication.fragment.Document.MODE_DRIVING);
 
             } else {

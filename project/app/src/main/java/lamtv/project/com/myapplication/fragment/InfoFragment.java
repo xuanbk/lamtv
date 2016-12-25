@@ -1,5 +1,6 @@
 package lamtv.project.com.myapplication.fragment;
 
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -60,6 +61,7 @@ public class InfoFragment extends Fragment {
         tvDescription = (WebView) view.findViewById(R.id.tvDescription);
         imgTravelsBottom = (ImageView) view.findViewById(R.id.imgTralvesBottom);
         imgTravelsTop = (ImageView)view.findViewById(R.id.imgTralvesTop);
+
         Glide.with(getActivity())
                 .load(travles.getLinkimage_1())
                 .crossFade()

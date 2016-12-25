@@ -1,25 +1,28 @@
 package lamtv.project.com.myapplication.fragment;
 
+
+import java.io.IOException;
+import java.util.List;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +30,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -35,11 +37,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+
 
 
 import lamtv.project.com.myapplication.Object.Route;
@@ -79,6 +79,9 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        /*setContentView(R.layout.activity_main);*/
+
+
         // specify an adapter (see also next example)
         arr = new ArrayList<>();
         mAdapter = new MapAdapter(arr, getActivity());
@@ -172,10 +175,10 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng hn = new LatLng(21.027347, 105.834560);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hn, 16));
+        LatLng hn = new LatLng(21.048928, 105.785468);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hn,16));
         originMarkers.add(mMap.addMarker(new MarkerOptions()
-                .title("Hà Nội")
+                .title("Học viện kĩ thuật quân sự")
                 .position(hn)));
 
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

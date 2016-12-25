@@ -1,6 +1,7 @@
 package lamtv.project.com.myapplication.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -166,7 +167,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 arr.add(travles);
                 arrTemp.add(travles);
                 mAdapter.notifyDataSetChanged();
+
             }
+
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {

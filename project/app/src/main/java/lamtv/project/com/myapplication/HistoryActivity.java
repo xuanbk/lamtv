@@ -54,9 +54,15 @@ public class HistoryActivity extends Activity implements View.OnClickListener {
         ivSpeech = (ImageView) findViewById(R.id.ivSpeech);
         etSearch = (EditText)findViewById(R.id.etSearch);
 
-        ivBack.setOnClickListener(this);
+       // ivBack.setOnClickListener(this);
+        //nut back
+        findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         ivSpeech.setOnClickListener(this);
-
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
         // use this setting to improve performance if you know that changes

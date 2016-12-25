@@ -22,16 +22,19 @@
             android:text="Search"
             android:textSize="15dp"
             android:textStyle="bold"
-            android:textColor="#fff" />
+            android:textColor="#fff"
+            android:id="@+id/textView" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:id="@+id/btnHistory"
             android:visibility="visible"
-            android:text="History"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"/>
+            android:text="favorite"
+            android:background="@drawable/dinh_dang_btn"
+            android:textSize="10dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:layout_alignTop="@+id/textView" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"

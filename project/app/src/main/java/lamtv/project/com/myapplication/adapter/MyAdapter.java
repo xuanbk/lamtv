@@ -67,7 +67,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("TRAVLES",mDataset.get(position));
-                intent.putExtra("HISTORY",isHistory);
+                intent.putExtra("HISTORY",isHistory);//HISTORY
                 context.startActivity(intent);
             }
         });

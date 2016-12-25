@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 25
     buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "lamtv.project.com.myapplication"
@@ -37,7 +37,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:10.0.1'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:design:25.1.0'
-    compile 'com.android.support:palette-v7:24.0.0'
+    compile 'com.android.support:palette-v7:25.0.0'
     compile 'com.android.support:support-v4:25.1.0'
 }
 apply plugin: 'com.google.gms.google-services'
