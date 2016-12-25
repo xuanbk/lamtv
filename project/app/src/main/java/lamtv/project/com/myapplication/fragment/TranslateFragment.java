@@ -92,6 +92,10 @@ public class TranslateFragment extends Fragment {
             }
         });
         translates = application.getTranslates();
+        //TODO data demo. khi nao di bao cao nho xoa di
+        translates.add(new Translate("Hello","Xin chào",true));
+        translates.add(new Translate("Tôi có thể giúp gì cho bạn?","Can I help you?",false));
+        translates.add(new Translate("My name is Davil","Tôi tên là Devil",true));
         adapter = new TranslateAdapter(translates,textToSpeech);
         lsvTranslate.setAdapter(adapter);
 
