@@ -81,8 +81,8 @@ public class DetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (mTravles.getLike().equals("1")) {
+                        mTravles.setLike("");
                         imvLike.setImageDrawable(getResources().getDrawable(R.drawable.like_1));
-
                         List<String> myList = new ArrayList<String>(Arrays.asList(Utils.getIdLike(DetailActivity.this).split(",")));
                         for (int i = 0; i < myList.size(); i++) {
                             if (mTravles.getId().equals(myList.get(i))) {
@@ -102,6 +102,7 @@ public class DetailActivity extends AppCompatActivity {
 
                         Utils.saveIdLike(DetailActivity.this, idsave);
                     } else {
+                        mTravles.setLike("1");
                         imvLike.setImageDrawable(getResources().getDrawable(R.drawable.like3));
                         if (id.equals("")) {
                             Utils.saveIdLike(DetailActivity.this, mTravles.getId());
