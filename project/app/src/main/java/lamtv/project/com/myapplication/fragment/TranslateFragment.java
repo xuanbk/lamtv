@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -93,9 +94,9 @@ public class TranslateFragment extends Fragment {
         });
         translates = application.getTranslates();
         //TODO data demo. khi nao di bao cao nho xoa di
-        translates.add(new Translate("Hello","Xin chào",true));
+       /* translates.add(new Translate("Hello","Xin chào",true));
         translates.add(new Translate("Tôi có thể giúp gì cho bạn?","Can I help you?",false));
-        translates.add(new Translate("My name is Davil","Tôi tên là Devil",true));
+        translates.add(new Translate("My name is Davil","Tôi tên là Devil",true));*/
         adapter = new TranslateAdapter(translates,textToSpeech);
         lsvTranslate.setAdapter(adapter);
 
@@ -107,13 +108,23 @@ public class TranslateFragment extends Fragment {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        ////
+        //mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_RESULTS_PENDINGINTENT, RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+       /// intent.putExtra(RecognizerIntent.EXT, true);
+       // mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
+        ///mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.getPackageName());
+        ////
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
                 getString(R.string.speech_prompt));
+
+
         try {
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
         } catch (ActivityNotFoundException a) {
-            ;
+            Toast.makeText(getActivity(),
+                    getString(R.string.speech_not_supported),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -162,10 +173,16 @@ public class TranslateFragment extends Fragment {
 
                     if (conn.getResponseCode() != 200) {
                         System.err.println(result);
+                        //Toast.makeText(getActivity(),
+                               // result,
+                               // Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (IOException | JsonSyntaxException ex) {
                     System.err.println(ex.getMessage());
+                    Toast.makeText(getActivity(),
+                            ex.getMessage(),
+                            Toast.LENGTH_SHORT).show();
                 }
                 return translatedText;
             }

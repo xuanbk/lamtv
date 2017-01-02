@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +38,7 @@ import lamtv.project.com.myapplication.Application;
 import lamtv.project.com.myapplication.HistoryActivity;
 import lamtv.project.com.myapplication.Object.Travles;
 import lamtv.project.com.myapplication.R;
+import lamtv.project.com.myapplication.Utils.StringUtils;
 import lamtv.project.com.myapplication.Utils.Utils;
 import lamtv.project.com.myapplication.adapter.MyAdapter;
 
@@ -220,10 +222,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
                 getString(R.string.speech_prompt));
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,1);
+
         try {
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
         } catch (ActivityNotFoundException a) {
-            ;
+            Toast.makeText(getActivity(),
+                    getString(R.string.speech_not_supported),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -237,7 +243,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     Log.d("", "onActivityResult: " + result.get(0));
-                    etSearch.setText(result.get(0));
+                    String textafter  = StringUtils.removeAccent(result.get(0));
+                    Log.d("", "txxx: " + textafter.toString());
+                    etSearch.setText(textafter);
 
                 }
                 break;
@@ -256,4 +264,5 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
 }

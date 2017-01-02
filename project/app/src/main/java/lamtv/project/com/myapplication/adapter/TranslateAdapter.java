@@ -17,9 +17,7 @@ import java.util.zip.Inflater;
 import lamtv.project.com.myapplication.Object.Translate;
 import lamtv.project.com.myapplication.R;
 
-/**
- * Created by LamTV on 06-Nov-16.
- */
+
 
 public class TranslateAdapter extends RecyclerView.Adapter<TranslateAdapter.ViewHolder> {
     private ArrayList<Translate> itemsData;

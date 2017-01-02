@@ -6,18 +6,45 @@
     android:orientation="vertical"
     android:weightSum="1"
     tools:context="lamtv.project.com.myapplication.fragment.MapSearchFragment">
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
     <EditText
         android:id="@+id/etOrigin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Choose starting point" />
+        android:hint="Choose starting point"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivSpeech1"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:src="@android:drawable/ic_btn_speak_now"/>
 
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
     <EditText
         android:id="@+id/etDestination"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Choose destination" />
+        android:hint="Choose destination"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivSpeech2"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:src="@android:drawable/ic_btn_speak_now"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,16 +88,16 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></com.google.android.gms.maps.MapView>
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rcvMap"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"></android.support.v7.widget.RecyclerView>
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"></com.google.android.gms.maps.MapView>
     </RelativeLayout>
 </LinearLayout>

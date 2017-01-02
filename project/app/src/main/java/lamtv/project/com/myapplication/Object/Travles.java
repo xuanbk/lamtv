@@ -2,9 +2,6 @@ package lamtv.project.com.myapplication.Object;
 
 import java.io.Serializable;
 
-/**
- * Created by XLV on 12/5/16.
- */
 
 public class Travles implements Serializable{
     private String id;
