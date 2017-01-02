@@ -32,6 +32,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -177,10 +178,12 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
         mMap = googleMap;
         LatLng hn = new LatLng(21.048928, 105.785468);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hn,16));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(hn,16));
         originMarkers.add(mMap.addMarker(new MarkerOptions()
                 .title("Học viện kĩ thuật quân sự")
                 .position(hn)));
-
+        mMap.getUiSettings().setZoomControlsEnabled( true );
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -257,8 +260,8 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
 
     @Override
     public void onResume() {
-        mapView.onResume();
         super.onResume();
+        mapView.onResume();
     }
 
     @Override
