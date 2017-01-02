@@ -36,6 +36,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -202,20 +203,17 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-       /* LatLng hn = new LatLng(21.048928, 105.785468);
+        LatLng hn = new LatLng(21.048928, 105.785468);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hn,16));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(hn,16));
         originMarkers.add(mMap.addMarker(new MarkerOptions()
                 .title("Học viện kĩ thuật quân sự")
-                .position(hn)));*/
+                .position(hn)));
+        mMap.getUiSettings().setZoomControlsEnabled( true );
+      
 
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         mMap.setMyLocationEnabled(true);
@@ -328,8 +326,8 @@ private void promptSpeechInput(Locale locale) {
     }
     @Override
     public void onResume() {
-        mapView.onResume();
         super.onResume();
+        mapView.onResume();
     }
 
     @Override
