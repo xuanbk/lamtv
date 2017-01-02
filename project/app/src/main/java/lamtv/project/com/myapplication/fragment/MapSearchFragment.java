@@ -183,7 +183,6 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
                 .title("Học viện kĩ thuật quân sự")
                 .position(hn)));
         mMap.getUiSettings().setZoomControlsEnabled( true );
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
