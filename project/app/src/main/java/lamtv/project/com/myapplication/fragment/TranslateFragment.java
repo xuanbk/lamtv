@@ -80,14 +80,14 @@ public class TranslateFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 isEnglish = true;
-                promptSpeechInput(Locale.ENGLISH);
+                promptSpeechInput("en-US");
             }
         });
         lnVietnamese.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isEnglish = false;
-                promptSpeechInput(new Locale("vi_VN"));
+                promptSpeechInput("vi-VN");
             }
         });
         lsvTranslate = (RecyclerView) view.findViewById(R.id.lsvTranslte);
@@ -116,20 +116,12 @@ public class TranslateFragment extends Fragment {
         return view;
     }
 
-    private void promptSpeechInput(Locale locale) {
+    private void promptSpeechInput(String locale) {
+        Log.d("locale" , locale.toString());
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        //String languagePref = "de";//or, whatever iso code...
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, locale);
-        intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, locale);
-        ////
-        //mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_RESULTS_PENDINGINTENT, RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-       /// intent.putExtra(RecognizerIntent.EXT, true);
-       // mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
-        ///mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.getPackageName());
-        ////
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,locale);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
                 getString(R.string.speech_prompt));
 
@@ -196,7 +188,7 @@ public class TranslateFragment extends Fragment {
                 } catch (IOException | JsonSyntaxException ex) {
                     System.err.println(ex.getMessage());
                     Toast.makeText(getActivity(),
-                            ex.getMessage(),
+                            "ERROR",
                             Toast.LENGTH_SHORT).show();
                 }
                 return translatedText;
@@ -207,7 +199,8 @@ public class TranslateFragment extends Fragment {
                 super.onPostExecute(s);
                 MyDatabaseHelper db = new MyDatabaseHelper(getActivity());
                 db.addNote(text,s,isEnglish);
-                translates = application.getTranslates();
+                translates.clear();
+                translates.addAll(application.getTranslates());
                 adapter.notifyDataSetChanged();
                 adapter.notifyItemInserted(translates.size()-1);
 
@@ -228,7 +221,9 @@ public class TranslateFragment extends Fragment {
                 if (resultCode == getActivity().RESULT_OK && null != data) {
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    Log.d(TAG, "onActivityResult: " + result.get(0));
+                    for (int i = 0 ; i <result.size();i++){
+                        Log.d("abc",result.get(i));
+                    }
                     if (isEnglish) {
                         translate(result.get(0), "en", "vi");
                     }else {
@@ -255,9 +250,8 @@ public class TranslateFragment extends Fragment {
                 position = (int) info.id;
                 MyDatabaseHelper db = new MyDatabaseHelper(getActivity());
                 db.deleteNote(position);
-                translates = application.getTranslates();
-
-
+                translates.clear();
+                translates.addAll(application.getTranslates());
                 this.adapter.notifyDataSetChanged();
                 return true;
         }
