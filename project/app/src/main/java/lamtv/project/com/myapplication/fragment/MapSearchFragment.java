@@ -210,6 +210,7 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(hn,16));
         originMarkers.add(mMap.addMarker(new MarkerOptions()
                 .title("Học viện kĩ thuật quân sự")
+<<<<<<< HEAD
                 .position(hn)));*/
         //Tạo Progress Bar
         myProgress = new ProgressDialog(getActivity());
@@ -229,6 +230,10 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
         mMap.getUiSettings().setZoomControlsEnabled( true );
       
 
+=======
+                .position(hn)));
+        mMap.getUiSettings().setZoomControlsEnabled( true );
+>>>>>>> d11ba3fc7403908dd476ee3b9362c701b6693ac3
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
