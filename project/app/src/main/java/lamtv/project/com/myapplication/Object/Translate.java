@@ -5,6 +5,7 @@ package lamtv.project.com.myapplication.Object;
  */
 
 public class Translate {
+    private int translate_id;
     private String en;
     private String vi;
     private boolean isEnglish;
@@ -12,6 +13,17 @@ public class Translate {
         this.en = en;
         this.vi = vi;
         this.isEnglish = isEnglish;
+    }
+
+    public Translate() {
+    }
+
+    public int getTranslate_id() {
+        return translate_id;
+    }
+
+    public void setTranslate_id(int translate_id) {
+        this.translate_id = translate_id;
     }
 
     public String getEn() {

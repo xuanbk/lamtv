@@ -77,6 +77,8 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<String> arr;
+    //Khai báo Progress Bar dialog để làm màn hình chờ
+    ProgressDialog myProgress;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -202,13 +204,28 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        LatLng hn = new LatLng(21.048928, 105.785468);
+        //mMap = googleMap;
+        /*LatLng hn = new LatLng(21.048928, 105.785468);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hn,16));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(hn,16));
         originMarkers.add(mMap.addMarker(new MarkerOptions()
                 .title("Học viện kĩ thuật quân sự")
-                .position(hn)));
+                .position(hn)));*/
+        //Tạo Progress Bar
+        myProgress = new ProgressDialog(getActivity());
+        myProgress.setTitle("Loading Map ...");
+        myProgress.setMessage("Please wait...");
+        myProgress.setCancelable(true);
+     //Hiển thị Progress Bar
+        myProgress.show();
+        mMap = googleMap;
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                myProgress.dismiss();
+            }
+        });
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled( true );
       
 
@@ -217,6 +234,7 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
             return;
         }
         mMap.setMyLocationEnabled(true);
+
     }
 // chuyen giong noi
 private void promptSpeechInput(Locale locale) {
@@ -324,6 +342,7 @@ private void promptSpeechInput(Locale locale) {
 
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();

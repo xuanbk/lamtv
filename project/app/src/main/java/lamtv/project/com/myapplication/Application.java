@@ -9,6 +9,7 @@ import lamtv.project.com.myapplication.Object.Travles;
 public class Application extends android.app.Application{
     private ArrayList<Translate> translates;
     private ArrayList<Travles> arrTemp;
+    MyDatabaseHelper db = new MyDatabaseHelper(this);
     @Override
     public void onCreate() {
         super.onCreate();
@@ -17,6 +18,7 @@ public class Application extends android.app.Application{
     }
 
     public ArrayList<Translate> getTranslates() {
+        translates =  db.getAllNotes();
         return translates;
     }
 

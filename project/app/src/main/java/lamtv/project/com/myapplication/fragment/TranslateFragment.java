@@ -13,9 +13,14 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -32,11 +37,13 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import lamtv.project.com.myapplication.Application;
+import lamtv.project.com.myapplication.MyDatabaseHelper;
 import lamtv.project.com.myapplication.Object.Translate;
 import lamtv.project.com.myapplication.R;
 import lamtv.project.com.myapplication.adapter.TranslateAdapter;
@@ -54,6 +61,7 @@ public class TranslateFragment extends Fragment {
     private TextToSpeech textToSpeech;
     private boolean isEnglish = true;
     private Application application;
+    private int position;
     private String translateAPIkey= "AIzaSyDD79kYXGrXhJoj2lfa8cSuav4JZCBkKCw";
     public TranslateFragment() {
         // Required empty public constructor
@@ -92,13 +100,17 @@ public class TranslateFragment extends Fragment {
                 }
             }
         });
+
+        //load db- lamtv
         translates = application.getTranslates();
-        //TODO data demo. khi nao di bao cao nho xoa di
-       /* translates.add(new Translate("Hello","Xin chào",true));
-        translates.add(new Translate("Tôi có thể giúp gì cho bạn?","Can I help you?",false));
-        translates.add(new Translate("My name is Davil","Tôi tên là Devil",true));*/
+        /*translates.addAll(list);// them*/
+       /* //TODO data demo. khi nao di bao cao nho xoa di
+        translates.add(new Translate("Hello","Xin chào",true));
+        translates.add(new Translate("Tôi có thể giúp gì cho bạn?","Can I help you?",false));*/
+        //
         adapter = new TranslateAdapter(translates,textToSpeech);
         lsvTranslate.setAdapter(adapter);
+        registerForContextMenu(lsvTranslate);
 
 
         return view;
@@ -108,6 +120,9 @@ public class TranslateFragment extends Fragment {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        //String languagePref = "de";//or, whatever iso code...
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, locale);
+        intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, locale);
         ////
         //mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_RESULTS_PENDINGINTENT, RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
        /// intent.putExtra(RecognizerIntent.EXT, true);
@@ -190,9 +205,14 @@ public class TranslateFragment extends Fragment {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                translates.add(new Translate(text,s,isEnglish));
+                MyDatabaseHelper db = new MyDatabaseHelper(getActivity());
+                db.addNote(text,s,isEnglish);
+                translates = application.getTranslates();
                 adapter.notifyDataSetChanged();
+                adapter.notifyItemInserted(translates.size()-1);
+
                 lsvTranslate.smoothScrollToPosition(translates.size()-1);
+
             }
         }.execute();
 
@@ -219,6 +239,29 @@ public class TranslateFragment extends Fragment {
             }
 
         }
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        // TODO Add your menu entries here
+        inflater.inflate(R.menu.menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.delete_item:
+                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                position = (int) info.id;
+                MyDatabaseHelper db = new MyDatabaseHelper(getActivity());
+                db.deleteNote(position);
+                translates = application.getTranslates();
+
+
+                this.adapter.notifyDataSetChanged();
+                return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package lamtv.project.com.myapplication;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -12,6 +13,7 @@ import lamtv.project.com.myapplication.fragment.TranslateFragment;
 
 public class MainActivity extends FragmentActivity {
     private Button btnTravel,btnTranslate,btnMap;
+    ProgressDialog myProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,12 @@ public class MainActivity extends FragmentActivity {
         btnMap = (Button) findViewById(R.id.Map_search);
 
         btnTravel = (Button) findViewById(R.id.Travels);
+        /*myProgress = new ProgressDialog(this);
+        myProgress.setTitle("Loading Map ...");
+        myProgress.setMessage("Please wait...");
+        myProgress.setCancelable(true);
+        //Hiển thị Progress Bar
+        myProgress.show();*/
         btnTravel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
