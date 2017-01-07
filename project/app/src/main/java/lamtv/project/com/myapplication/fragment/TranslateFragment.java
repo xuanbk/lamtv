@@ -1,8 +1,10 @@
 package lamtv.project.com.myapplication.fragment;
 
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -21,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -63,6 +66,7 @@ public class TranslateFragment extends Fragment {
     private Application application;
     private int position;
     private String translateAPIkey= "AIzaSyDD79kYXGrXhJoj2lfa8cSuav4JZCBkKCw";
+    private Button btnDelete;
     public TranslateFragment() {
         // Required empty public constructor
     }
@@ -108,11 +112,30 @@ public class TranslateFragment extends Fragment {
         translates.add(new Translate("Hello","Xin chào",true));
         translates.add(new Translate("Tôi có thể giúp gì cho bạn?","Can I help you?",false));*/
         //
-        adapter = new TranslateAdapter(translates,textToSpeech);
+        adapter = new TranslateAdapter(translates,textToSpeech,getActivity());
         lsvTranslate.setAdapter(adapter);
         registerForContextMenu(lsvTranslate);
-
-
+        btnDelete =(Button) view.findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Delete All Data")
+                        .setMessage("Are you sure you want to delete all Data?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // TODO gọi hàm xoá tất cả dữ liệuxxxx
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        });
         return view;
     }
 
