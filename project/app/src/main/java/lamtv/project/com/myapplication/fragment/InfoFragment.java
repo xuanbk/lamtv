@@ -51,7 +51,9 @@ public class InfoFragment extends Fragment {
         // Required empty public constructor
         this.travles = travles;
     }
+    public InfoFragment(){
 
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

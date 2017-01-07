@@ -137,14 +137,16 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
             @Override
             public void onClick(View view) {
                 ivSpeech = true;
-                promptSpeechInput(Locale.ENGLISH);
+                //promptSpeechInput(Locale.ENGLISH);
+                promptSpeechInput("vi-VN");
             }
         });
         ivSpeech2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ivSpeech = false;
-                promptSpeechInput(Locale.ENGLISH);
+                //promptSpeechInput(Locale.ENGLISH);
+                promptSpeechInput("vi-VN");
             }
         });
         return view;
@@ -227,7 +229,6 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
         });
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled( true );
-        mMap.getUiSettings().setZoomControlsEnabled( true );
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
@@ -236,7 +237,7 @@ public class MapSearchFragment extends Fragment implements OnMapReadyCallback, D
 
     }
 // chuyen giong noi
-private void promptSpeechInput(Locale locale) {
+ private void promptSpeechInput(String locale) {
     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);

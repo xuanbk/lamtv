@@ -12,6 +12,7 @@ import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -50,7 +51,7 @@ import lamtv.project.com.myapplication.adapter.TranslateAdapter;
 
 
 
-public class TranslateFragment extends Fragment {
+public class TranslateFragment extends Fragment  {
     private final int REQ_CODE_SPEECH_INPUT = 100;
     String TAG = "TranslateFragmen";
     private LinearLayout lnEnglish,lnVietnamese;
@@ -62,7 +63,7 @@ public class TranslateFragment extends Fragment {
     private boolean isEnglish = true;
     private Application application;
     private int position;
-    private String translateAPIkey= "AIzaSyDD79kYXGrXhJoj2lfa8cSuav4JZCBkKCw";
+    private String translateAPIkey= "AIzaSyCx7b-lVYtBacU8Xv-a-Jg5XnNFvP561YI"; //key moi "AIzaSyCx7b-lVYtBacU8Xv-a-Jg5XnNFvP561YI" -cu AIzaSyDD79kYXGrXhJoj2lfa8cSuav4JZCBkKCw
     public TranslateFragment() {
         // Required empty public constructor
     }
@@ -133,6 +134,25 @@ public class TranslateFragment extends Fragment {
                     getString(R.string.speech_not_supported),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+    private ItemTouchHelper.Callback createHelperCallback() {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
+                new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+//                        moveItem(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                        return true;
+                    }
+
+                    @Override
+                    public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                        deleteItem(viewHolder.getAdapterPosition());
+                    }
+                };
+        return simpleItemTouchCallback;
     }
 
     private void translate(final String text,final String from,final String to) {
@@ -246,13 +266,14 @@ public class TranslateFragment extends Fragment {
     public boolean onContextItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.delete_item:
-                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                /*AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 position = (int) info.id;
                 MyDatabaseHelper db = new MyDatabaseHelper(getActivity());
                 db.deleteNote(position);
                 translates.clear();
                 translates.addAll(application.getTranslates());
-                this.adapter.notifyDataSetChanged();
+                this.adapter.notifyDataSetChanged();*/
+                Toast.makeText(getActivity(), "djshdjhsjd",Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onContextItemSelected(item);
@@ -272,5 +293,11 @@ public class TranslateFragment extends Fragment {
     public void onDestroy() {
         application.setTranslates(translates);
         super.onDestroy();
+    }
+    private void deleteItem(final int position) {
+        MyDatabaseHelper db = new MyDatabaseHelper(getActivity());
+        translates.remove(position);
+        db.deleteNote(position);
+        adapter.notifyItemRemoved(position);
     }
 }
