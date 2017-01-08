@@ -21,18 +21,19 @@ import java.util.zip.Inflater;
 import lamtv.project.com.myapplication.MyDatabaseHelper;
 import lamtv.project.com.myapplication.Object.Translate;
 import lamtv.project.com.myapplication.R;
-
+import lamtv.project.com.myapplication.interfaces.ItemClick;
 
 
 public class TranslateAdapter extends RecyclerView.Adapter<TranslateAdapter.ViewHolder> {
     private ArrayList<Translate> itemsData;
     private TextToSpeech textToSpeech;
     private Context context;
-    private lamtv.project.com.myapplication.fragment.TranslateFragment tranfr;
-    public TranslateAdapter(ArrayList<Translate> itemsData,TextToSpeech textToSpeech,Context context) {
+    private ItemClick itemClick;
+    public TranslateAdapter(ArrayList<Translate> itemsData,TextToSpeech textToSpeech,Context context, ItemClick itemClick) {
         this.itemsData = itemsData;
         this.textToSpeech = textToSpeech;
         this.context = context;
+        this.itemClick = itemClick;
     }
 
     // Create new views (invoked by the layout manager)
@@ -100,11 +101,7 @@ public class TranslateAdapter extends RecyclerView.Adapter<TranslateAdapter.View
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // TODO gọi hàm xoá dữ liệu theo
-                                // hàm xoá tất cả dữ liệuxxx
-                                MyDatabaseHelper db = new MyDatabaseHelper(context);
-                                db.deleteNote(itemsData.get(position).getTranslate_id());
-                                //itemsData.clear();
-                                tranfr.refresh();
+                                itemClick.onDelete(itemsData.get(position),position);
 
                             }
                         })

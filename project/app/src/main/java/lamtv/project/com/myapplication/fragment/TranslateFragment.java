@@ -51,10 +51,10 @@ import lamtv.project.com.myapplication.MyDatabaseHelper;
 import lamtv.project.com.myapplication.Object.Translate;
 import lamtv.project.com.myapplication.R;
 import lamtv.project.com.myapplication.adapter.TranslateAdapter;
+import lamtv.project.com.myapplication.interfaces.ItemClick;
 
 
-
-public class TranslateFragment extends Fragment  {
+public class TranslateFragment extends Fragment  implements ItemClick{
     private final int REQ_CODE_SPEECH_INPUT = 100;
     String TAG = "TranslateFragmen";
     private LinearLayout lnEnglish,lnVietnamese;
@@ -111,7 +111,7 @@ public class TranslateFragment extends Fragment  {
 
         //load db- lamtv
         translates = application.getTranslates();
-        adapter = new TranslateAdapter(translates,textToSpeech,getActivity());
+        adapter = new TranslateAdapter(translates,textToSpeech,getActivity(),this);
         lsvTranslate.setAdapter(adapter);
         registerForContextMenu(lsvTranslate);
         btnDelete =(Button) view.findViewById(R.id.btnDelete);
@@ -127,10 +127,7 @@ public class TranslateFragment extends Fragment  {
                                 MyDatabaseHelper db = new MyDatabaseHelper(getActivity());
                                 db.delteALL();
                                 translates.clear();
-                               translates.addAll(application.getTranslates());
                                 adapter.notifyDataSetChanged();
-                                adapter.notifyItemRemoved(translates.size()-1);
-                                lsvTranslate.smoothScrollToPosition(translates.size()-1);
 
                             }
                         })
@@ -322,5 +319,15 @@ public class TranslateFragment extends Fragment  {
         adapter.notifyDataSetChanged();
         adapter.notifyItemRemoved(translates.size()-1);
         lsvTranslate.smoothScrollToPosition(translates.size()-1);
+    }
+
+    @Override
+    public void onDelete(Translate translate , int position) {
+        // hàm xoá tất cả dữ liệuxxx
+        MyDatabaseHelper db = new MyDatabaseHelper(getActivity());
+        db.deleteNote(translate.getTranslate_id());
+        //itemsData.clear();
+        translates.remove(position);
+        adapter.notifyDataSetChanged();
     }
 }
