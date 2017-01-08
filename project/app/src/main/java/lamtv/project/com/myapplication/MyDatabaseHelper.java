@@ -161,4 +161,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(translate_id)});
         db.close();
     }
+    public void  delteALL(){
+        Log.i(TAG, "MyDatabaseHelper.deleteall ... ");
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Hủy (drop) bảng cũ nếu nó đã tồn tại.
+        db.execSQL("DELETE FROM " + TABLE_TRANSLATE);
+        db.close();
+    }
 }

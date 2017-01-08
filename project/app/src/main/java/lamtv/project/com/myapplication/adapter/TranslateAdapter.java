@@ -1,6 +1,9 @@
 package lamtv.project.com.myapplication.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.media.Image;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.zip.Inflater;
 
+import lamtv.project.com.myapplication.MyDatabaseHelper;
 import lamtv.project.com.myapplication.Object.Translate;
 import lamtv.project.com.myapplication.R;
 
@@ -23,9 +27,12 @@ import lamtv.project.com.myapplication.R;
 public class TranslateAdapter extends RecyclerView.Adapter<TranslateAdapter.ViewHolder> {
     private ArrayList<Translate> itemsData;
     private TextToSpeech textToSpeech;
-    public TranslateAdapter(ArrayList<Translate> itemsData,TextToSpeech textToSpeech) {
+    private Context context;
+    private lamtv.project.com.myapplication.fragment.TranslateFragment tranfr;
+    public TranslateAdapter(ArrayList<Translate> itemsData,TextToSpeech textToSpeech,Context context) {
         this.itemsData = itemsData;
         this.textToSpeech = textToSpeech;
+        this.context = context;
     }
 
     // Create new views (invoked by the layout manager)
@@ -61,8 +68,11 @@ public class TranslateAdapter extends RecyclerView.Adapter<TranslateAdapter.View
             @Override
             public void onClick(View view) {
                 if (itemsData.get(position).isEnglish()){
+                    textToSpeech.setSpeechRate(0.5f);
                     textToSpeech.setLanguage(new Locale("vi_VN"));
+
                 }else {
+                    textToSpeech.setSpeechRate(0.7f);
                     textToSpeech.setLanguage(Locale.ENGLISH);
                 }
 
@@ -81,6 +91,32 @@ public class TranslateAdapter extends RecyclerView.Adapter<TranslateAdapter.View
                 textToSpeech.speak(itemsData.get(position).getEn(), TextToSpeech.QUEUE_FLUSH, null);
             }
         });
+        viewHolder.imvDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                new AlertDialog.Builder(context)
+                        .setTitle("Delete Data")
+                        .setMessage("Are you sure you want to delete?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // TODO gọi hàm xoá dữ liệu theo
+                                // hàm xoá tất cả dữ liệuxxx
+                                MyDatabaseHelper db = new MyDatabaseHelper(context);
+                                db.deleteNote(itemsData.get(position).getTranslate_id());
+                                //itemsData.clear();
+                                tranfr.refresh();
+
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        });
 
 
     }
@@ -89,13 +125,14 @@ public class TranslateAdapter extends RecyclerView.Adapter<TranslateAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView txtEn,txtVi;
-        public ImageView ivFlagVI,ivFlagEN;
+        public ImageView ivFlagVI,ivFlagEN,imvDelete;
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             txtEn = (TextView) itemLayoutView.findViewById(R.id.tvTranslate);
             txtVi = (TextView) itemLayoutView.findViewById(R.id.tvTranslateVi);
             ivFlagEN = (ImageView) itemLayoutView.findViewById(R.id.ivFlagEN);
             ivFlagVI = (ImageView) itemLayoutView.findViewById(R.id.ivFlagVI);
+            imvDelete = (ImageView) itemLayoutView.findViewById(R.id.imvDelete);
         }
     }
 

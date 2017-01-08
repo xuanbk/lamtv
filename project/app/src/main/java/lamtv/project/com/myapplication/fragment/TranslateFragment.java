@@ -1,8 +1,10 @@
 package lamtv.project.com.myapplication.fragment;
 
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -22,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -63,7 +66,11 @@ public class TranslateFragment extends Fragment  {
     private boolean isEnglish = true;
     private Application application;
     private int position;
-    private String translateAPIkey= "AIzaSyCx7b-lVYtBacU8Xv-a-Jg5XnNFvP561YI"; //key moi "AIzaSyCx7b-lVYtBacU8Xv-a-Jg5XnNFvP561YI" -cu AIzaSyDD79kYXGrXhJoj2lfa8cSuav4JZCBkKCw
+
+    private String translateAPIkey= "AIzaSyDD79kYXGrXhJoj2lfa8cSuav4JZCBkKCw";
+   ///key API *:AIzaSyDQmVlaHYcZJ-wnYoCuGj-lRrJJFa5FQ1Q
+    private Button btnDelete;
+
     public TranslateFragment() {
         // Required empty public constructor
     }
@@ -104,16 +111,38 @@ public class TranslateFragment extends Fragment  {
 
         //load db- lamtv
         translates = application.getTranslates();
-        /*translates.addAll(list);// them*/
-       /* //TODO data demo. khi nao di bao cao nho xoa di
-        translates.add(new Translate("Hello","Xin chào",true));
-        translates.add(new Translate("Tôi có thể giúp gì cho bạn?","Can I help you?",false));*/
-        //
-        adapter = new TranslateAdapter(translates,textToSpeech);
+        adapter = new TranslateAdapter(translates,textToSpeech,getActivity());
         lsvTranslate.setAdapter(adapter);
         registerForContextMenu(lsvTranslate);
+        btnDelete =(Button) view.findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Delete All Data")
+                        .setMessage("Are you sure you want to delete all Data?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // hàm xoá tất cả dữ liệuxxxx
+                                MyDatabaseHelper db = new MyDatabaseHelper(getActivity());
+                                db.delteALL();
+                                translates.clear();
+                               translates.addAll(application.getTranslates());
+                                adapter.notifyDataSetChanged();
+                                adapter.notifyItemRemoved(translates.size()-1);
+                                lsvTranslate.smoothScrollToPosition(translates.size()-1);
 
-
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        });
         return view;
     }
 
@@ -135,7 +164,7 @@ public class TranslateFragment extends Fragment  {
                     Toast.LENGTH_SHORT).show();
         }
     }
-    private ItemTouchHelper.Callback createHelperCallback() {
+   /* private ItemTouchHelper.Callback createHelperCallback() {
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
                 new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
                         ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -153,7 +182,7 @@ public class TranslateFragment extends Fragment  {
                     }
                 };
         return simpleItemTouchCallback;
-    }
+    }*/
 
     private void translate(final String text,final String from,final String to) {
         new AsyncTask<Void, Void, String>() {
@@ -266,13 +295,6 @@ public class TranslateFragment extends Fragment  {
     public boolean onContextItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.delete_item:
-                /*AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                position = (int) info.id;
-                MyDatabaseHelper db = new MyDatabaseHelper(getActivity());
-                db.deleteNote(position);
-                translates.clear();
-                translates.addAll(application.getTranslates());
-                this.adapter.notifyDataSetChanged();*/
                 Toast.makeText(getActivity(), "djshdjhsjd",Toast.LENGTH_SHORT).show();
                 return true;
         }
@@ -294,10 +316,11 @@ public class TranslateFragment extends Fragment  {
         application.setTranslates(translates);
         super.onDestroy();
     }
-    private void deleteItem(final int position) {
-        MyDatabaseHelper db = new MyDatabaseHelper(getActivity());
-        translates.remove(position);
-        db.deleteNote(position);
-        adapter.notifyItemRemoved(position);
+    public void refresh() {
+        translates.clear();
+        translates.addAll(application.getTranslates());
+        adapter.notifyDataSetChanged();
+        adapter.notifyItemRemoved(translates.size()-1);
+        lsvTranslate.smoothScrollToPosition(translates.size()-1);
     }
 }
